@@ -23,9 +23,16 @@ public class AdminController {
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
         model.addAttribute("totalParticipants", analysisService.countParticipants());
+        model.addAttribute("completedParticipants", analysisService.countCompletedParticipants());
+        model.addAttribute("completionRate", analysisService.completionRate());
         model.addAttribute("totalResponses", analysisService.countResponses());
+        model.addAttribute("averageDurationSeconds", analysisService.averageDurationSeconds());
+        model.addAttribute("tooFastResponses", analysisService.countTooFastResponses());
+        model.addAttribute("straightLinedResponses", analysisService.countStraightLinedResponses());
+        model.addAttribute("averageAwarenessScore", analysisService.averageAwarenessScore());
         model.addAttribute("summaries", analysisService.summarizeByScenario());
-        model.addAttribute("interpretation", analysisService.interpretation());
+        model.addAttribute("diff", analysisService.intentionDifferences());
+        model.addAttribute("reportSummary", analysisService.reportSummary());
         return "admin-dashboard";
     }
 
