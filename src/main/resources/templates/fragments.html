@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="scale(fieldName, questionText)">
+    <p th:text="${questionText}"></p>
+    <div class="scale">
+        <label th:each="score : ${#numbers.sequence(1,5)}">
+            <input type="radio" th:field="*{__${fieldName}__}" th:value="${score}">
+            <span th:text="${score}"></span>점
+        </label>
+    </div>
+</div>
+</body>
+</html>
