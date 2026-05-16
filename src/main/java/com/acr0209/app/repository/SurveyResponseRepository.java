@@ -14,4 +14,7 @@ public interface SurveyResponseRepository extends JpaRepository<SurveyResponse, 
             order by r.scenarioCode
             """)
     List<Object[]> summarizeByScenario();
+
+    @Query("select count(distinct r.participantId) from SurveyResponse r")
+    long countDistinctParticipants();
 }
