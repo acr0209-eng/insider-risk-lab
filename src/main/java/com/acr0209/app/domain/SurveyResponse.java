@@ -1,5 +1,6 @@
 package com.acr0209.app.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,6 +15,12 @@ public class SurveyResponse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
+    private String participantId;
+
+    @Column(nullable = false)
+    private int scenarioOrder;
 
     private String scenarioCode;
     private String motivationLevel;
@@ -41,6 +48,8 @@ public class SurveyResponse {
     }
 
     public SurveyResponse(
+            String participantId,
+            int scenarioOrder,
             String scenarioCode,
             String motivationLevel,
             String opportunityLevel,
@@ -54,6 +63,8 @@ public class SurveyResponse {
             int awarenessQ2,
             int awarenessQ3
     ) {
+        this.participantId = participantId;
+        this.scenarioOrder = scenarioOrder;
         this.scenarioCode = scenarioCode;
         this.motivationLevel = motivationLevel;
         this.opportunityLevel = opportunityLevel;
@@ -77,6 +88,8 @@ public class SurveyResponse {
     }
 
     public Long getId() { return id; }
+    public String getParticipantId() { return participantId; }
+    public int getScenarioOrder() { return scenarioOrder; }
     public String getScenarioCode() { return scenarioCode; }
     public String getMotivationLevel() { return motivationLevel; }
     public String getOpportunityLevel() { return opportunityLevel; }
