@@ -59,6 +59,7 @@ public class SurveyService {
                 scenario.getCode(),
                 scenario.getMotivationLevel(),
                 scenario.getOpportunityLevel(),
+                form.getActionChoice(),
                 durationSeconds,
                 form.getIntentionQ1(),
                 form.getIntentionQ2(),
