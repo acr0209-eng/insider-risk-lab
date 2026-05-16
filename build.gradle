@@ -7,10 +7,6 @@ plugins {
 group = 'com.acr0209'
 version = '0.0.1-SNAPSHOT'
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
