@@ -3,15 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thanks - Insider Risk Lab</title>
+    <title>Feedback - Insider Risk Lab</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 <div class="container">
     <div class="card">
-        <h1>응답이 저장되었습니다.</h1>
-        <p>참여해주셔서 감사합니다. 수집된 응답은 조건별 평균 비교와 내부자 위협 분석에 사용됩니다.</p>
-        <a class="button" th:href="@{/}">처음으로</a>
+        <h1>응답이 완료되었습니다.</h1>
+        <p class="muted">아래 결과는 정답이나 평가가 아니라, 당신의 응답 패턴을 바탕으로 어떤 상황 조건에서 판단이 달라지는지 보여주는 참고용 피드백입니다.</p>
+
+        <div th:if="${feedback != null}">
+            <section class="feedback-hero">
+                <p class="muted">나의 내부자 위험 반응 프로필</p>
+                <h2 th:text="${feedback.profileType}">동기 민감형</h2>
+                <p th:text="${feedback.interpretation}">해석</p>
+            </section>
+
+            <h2>나의 위험 스위치</h2>
+            <div class="grid">
+                <div class="stat"><strong th:text="${feedback.motivationEffect}">0</strong><br>업무 압박 효과</div>
+                <div class="stat"><strong th:text="${feedback.opportunityEffect}">0</strong><br>반출 기회 효과</div>
+                <div class="stat"><strong th:text="${feedback.combinedEffect}">0</strong><br>A-D 변화량</div>
+                <div class="stat"><strong th:text="${feedback.averageJustification}">0</strong><br>평균 정당화 수준</div>
+            </div>
+
+            <div class="stat">
+                <strong>가장 큰 위험 스위치</strong>
+                <p th:text="${feedback.mainSwitch}">업무 압박</p>
+            </div>
+
+            <div class="stat" style="margin-top: 16px;">
+                <strong>예방 팁</strong>
+                <p th:text="${feedback.preventionTip}">예방 팁</p>
+            </div>
+        </div>
+
+        <div style="margin-top: 24px;">
+            <a class="button" th:href="@{/}">처음으로</a>
+        </div>
     </div>
 </div>
 </body>
