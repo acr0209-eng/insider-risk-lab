@@ -3,6 +3,7 @@ package com.acr0209.app.controller;
 import com.acr0209.app.domain.Scenario;
 import com.acr0209.app.dto.AwarenessForm;
 import com.acr0209.app.dto.SurveyForm;
+import com.acr0209.app.service.FeedbackService;
 import com.acr0209.app.service.SurveyService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -27,9 +28,11 @@ public class SurveyController {
     private static final String STEP_STARTED_AT = "stepStartedAt";
 
     private final SurveyService surveyService;
+    private final FeedbackService feedbackService;
 
-    public SurveyController(SurveyService surveyService) {
+    public SurveyController(SurveyService surveyService, FeedbackService feedbackService) {
         this.surveyService = surveyService;
+        this.feedbackService = feedbackService;
     }
 
     @GetMapping("/start")
@@ -51,6 +54,8 @@ public class SurveyController {
         Scenario scenario = surveyService.getScenario(scenarioCode);
         session.setAttribute(STEP_STARTED_AT, Instant.now().toEpochMilli());
         model.addAttribute("scenario", scenario);
+        model.addAttribute("chatLines", scenario.getChatText().split("\\n"));
+        model.addAttribute("summaryLines", scenario.getSituationSummary().split("\\n"));
         model.addAttribute("surveyForm", new SurveyForm());
         model.addAttribute("step", state.currentIndex() + 1);
         model.addAttribute("totalSteps", state.scenarioOrder().size());
@@ -74,6 +79,8 @@ public class SurveyController {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("scenario", scenario);
+            model.addAttribute("chatLines", scenario.getChatText().split("\\n"));
+            model.addAttribute("summaryLines", scenario.getSituationSummary().split("\\n"));
             model.addAttribute("step", state.currentIndex() + 1);
             model.addAttribute("totalSteps", state.scenarioOrder().size());
             return "survey-form";
@@ -100,8 +107,7 @@ public class SurveyController {
     public String submitAwareness(
             HttpSession session,
             @Valid @ModelAttribute AwarenessForm awarenessForm,
-            BindingResult bindingResult,
-            Model model
+            BindingResult bindingResult
     ) {
         SurveyState state = getState(session);
         if (bindingResult.hasErrors()) {
@@ -112,7 +118,11 @@ public class SurveyController {
     }
 
     @GetMapping("/thanks")
-    public String thanks(HttpSession session) {
+    public String thanks(HttpSession session, Model model) {
+        String participantId = (String) session.getAttribute(PARTICIPANT_ID);
+        if (participantId != null) {
+            model.addAttribute("feedback", feedbackService.buildFeedback(participantId));
+        }
         session.removeAttribute(PARTICIPANT_ID);
         session.removeAttribute(SCENARIO_ORDER);
         session.removeAttribute(CURRENT_INDEX);
