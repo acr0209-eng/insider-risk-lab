@@ -26,7 +26,7 @@
         <div class="grid">
             <div class="stat"><strong th:text="${tooFastResponses}">0</strong><br>8초 미만 응답</div>
             <div class="stat"><strong th:text="${straightLinedResponses}">0</strong><br>모든 문항 동일 점수</div>
-            <div class="stat"><strong>CSV</strong><br>품질 플래그 포함</div>
+            <div class="stat"><strong>CSV</strong><br>행동 선택과 품질 플래그 포함</div>
         </div>
 
         <h2>실험 조건 구조</h2>
@@ -50,6 +50,7 @@
                 <th>응답 수</th>
                 <th>반출 의향 평균</th>
                 <th>정당화 평균</th>
+                <th>위험 점수</th>
             </tr>
             </thead>
             <tbody>
@@ -58,6 +59,29 @@
                 <td th:text="${summary.responseCount}">0</td>
                 <td th:text="${summary.averageIntention}">0</td>
                 <td th:text="${summary.averageJustification}">0</td>
+                <td th:text="${summary.averageRisk}">0</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <h2>행동 선택 분포</h2>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>조건</th>
+                <th>공식 승인 대기</th>
+                <th>일정 조정 요청</th>
+                <th>동료에게 부탁</th>
+                <th>개인 이메일/클라우드</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="code : ${#arrays.asList('A','B','C','D')}">
+                <td th:text="${code}">A</td>
+                <td th:text="${actionChoiceCounts.get(code) != null ? actionChoiceCounts.get(code).getOrDefault('wait_for_approval', 0) : 0}">0</td>
+                <td th:text="${actionChoiceCounts.get(code) != null ? actionChoiceCounts.get(code).getOrDefault('request_adjustment', 0) : 0}">0</td>
+                <td th:text="${actionChoiceCounts.get(code) != null ? actionChoiceCounts.get(code).getOrDefault('ask_coworker', 0) : 0}">0</td>
+                <td th:text="${actionChoiceCounts.get(code) != null ? actionChoiceCounts.get(code).getOrDefault('use_personal_channel', 0) : 0}">0</td>
             </tr>
             </tbody>
         </table>
@@ -89,6 +113,7 @@
     const labels = summaries.map(item => item.scenarioCode);
     const intention = summaries.map(item => item.averageIntention);
     const justification = summaries.map(item => item.averageJustification);
+    const risk = summaries.map(item => item.averageRisk);
 
     new Chart(document.getElementById('intentionChart'), {
         type: 'bar',
@@ -96,7 +121,8 @@
             labels,
             datasets: [
                 { label: '반출 의향 평균', data: intention },
-                { label: '정당화 평균', data: justification }
+                { label: '정당화 평균', data: justification },
+                { label: '위험 점수', data: risk }
             ]
         },
         options: {
