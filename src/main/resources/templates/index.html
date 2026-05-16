@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insider Risk Lab</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <h1>Insider Risk Lab</h1>
+        <p class="muted">비악의적 내부자 위협 시나리오 실험 플랫폼</p>
+        <p>업무상 동기와 보안위반 기회가 내부자료 반출 의향에 미치는 영향을 2×2 시나리오 실험으로 수집하고 분석합니다.</p>
+        <div class="grid">
+            <div class="stat"><strong>2×2</strong><br>Motivation × Opportunity</div>
+            <div class="stat"><strong>5점</strong><br>Likert scale survey</div>
+            <div class="stat"><strong>CSV</strong><br>Export for analysis</div>
+        </div>
+        <a class="button" th:href="@{/survey/start}">설문 시작하기</a>
+        <a class="button secondary" th:href="@{/admin/dashboard}">관리자 대시보드</a>
+    </div>
+</div>
+</body>
+</html>
