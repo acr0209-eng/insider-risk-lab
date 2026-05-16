@@ -5,8 +5,9 @@ import com.acr0209.app.domain.SurveyResponse;
 import com.acr0209.app.dto.SurveyForm;
 import com.acr0209.app.repository.ScenarioRepository;
 import com.acr0209.app.repository.SurveyResponseRepository;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +16,6 @@ public class SurveyService {
 
     private final ScenarioRepository scenarioRepository;
     private final SurveyResponseRepository surveyResponseRepository;
-    private final Random random = new Random();
 
     public SurveyService(ScenarioRepository scenarioRepository, SurveyResponseRepository surveyResponseRepository) {
         this.scenarioRepository = scenarioRepository;
@@ -23,12 +23,16 @@ public class SurveyService {
     }
 
     @Transactional(readOnly = true)
-    public Scenario getRandomScenario() {
-        List<Scenario> scenarios = scenarioRepository.findAll();
-        if (scenarios.isEmpty()) {
-            throw new IllegalStateException("No scenarios are registered. Check data.sql.");
+    public List<String> createRandomScenarioOrder() {
+        List<String> codes = new ArrayList<>(scenarioRepository.findAll().stream()
+                .map(Scenario::getCode)
+                .sorted()
+                .toList());
+        if (codes.size() != 4) {
+            throw new IllegalStateException("Exactly 4 scenarios are required. Check data.sql.");
         }
-        return scenarios.get(random.nextInt(scenarios.size()));
+        Collections.shuffle(codes);
+        return codes;
     }
 
     @Transactional(readOnly = true)
@@ -38,9 +42,11 @@ public class SurveyService {
     }
 
     @Transactional
-    public SurveyResponse saveResponse(String scenarioCode, SurveyForm form) {
+    public SurveyResponse saveResponse(String participantId, int scenarioOrder, String scenarioCode, SurveyForm form) {
         Scenario scenario = getScenario(scenarioCode);
         SurveyResponse response = new SurveyResponse(
+                participantId,
+                scenarioOrder,
                 scenario.getCode(),
                 scenario.getMotivationLevel(),
                 scenario.getOpportunityLevel(),
