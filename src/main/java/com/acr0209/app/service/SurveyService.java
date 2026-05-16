@@ -1,8 +1,11 @@
 package com.acr0209.app.service;
 
+import com.acr0209.app.domain.ParticipantProfile;
 import com.acr0209.app.domain.Scenario;
 import com.acr0209.app.domain.SurveyResponse;
+import com.acr0209.app.dto.AwarenessForm;
 import com.acr0209.app.dto.SurveyForm;
+import com.acr0209.app.repository.ParticipantProfileRepository;
 import com.acr0209.app.repository.ScenarioRepository;
 import com.acr0209.app.repository.SurveyResponseRepository;
 import java.util.ArrayList;
@@ -16,10 +19,16 @@ public class SurveyService {
 
     private final ScenarioRepository scenarioRepository;
     private final SurveyResponseRepository surveyResponseRepository;
+    private final ParticipantProfileRepository participantProfileRepository;
 
-    public SurveyService(ScenarioRepository scenarioRepository, SurveyResponseRepository surveyResponseRepository) {
+    public SurveyService(
+            ScenarioRepository scenarioRepository,
+            SurveyResponseRepository surveyResponseRepository,
+            ParticipantProfileRepository participantProfileRepository
+    ) {
         this.scenarioRepository = scenarioRepository;
         this.surveyResponseRepository = surveyResponseRepository;
+        this.participantProfileRepository = participantProfileRepository;
     }
 
     @Transactional(readOnly = true)
@@ -42,7 +51,7 @@ public class SurveyService {
     }
 
     @Transactional
-    public SurveyResponse saveResponse(String participantId, int scenarioOrder, String scenarioCode, SurveyForm form) {
+    public SurveyResponse saveResponse(String participantId, int scenarioOrder, String scenarioCode, long durationSeconds, SurveyForm form) {
         Scenario scenario = getScenario(scenarioCode);
         SurveyResponse response = new SurveyResponse(
                 participantId,
@@ -50,16 +59,25 @@ public class SurveyService {
                 scenario.getCode(),
                 scenario.getMotivationLevel(),
                 scenario.getOpportunityLevel(),
+                durationSeconds,
                 form.getIntentionQ1(),
                 form.getIntentionQ2(),
                 form.getIntentionQ3(),
                 form.getJustificationQ1(),
                 form.getJustificationQ2(),
-                form.getJustificationQ3(),
+                form.getJustificationQ3()
+        );
+        return surveyResponseRepository.save(response);
+    }
+
+    @Transactional
+    public ParticipantProfile saveAwareness(String participantId, AwarenessForm form) {
+        ParticipantProfile profile = new ParticipantProfile(
+                participantId,
                 form.getAwarenessQ1(),
                 form.getAwarenessQ2(),
                 form.getAwarenessQ3()
         );
-        return surveyResponseRepository.save(response);
+        return participantProfileRepository.save(profile);
     }
 }
