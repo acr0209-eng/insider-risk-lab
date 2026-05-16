@@ -26,6 +26,10 @@ public class SurveyResponse {
     private String motivationLevel;
     private String opportunityLevel;
 
+    private long durationSeconds;
+    private boolean tooFast;
+    private boolean straightLined;
+
     private int intentionQ1;
     private int intentionQ2;
     private int intentionQ3;
@@ -48,6 +52,7 @@ public class SurveyResponse {
             String scenarioCode,
             String motivationLevel,
             String opportunityLevel,
+            long durationSeconds,
             int intentionQ1,
             int intentionQ2,
             int intentionQ3,
@@ -60,6 +65,7 @@ public class SurveyResponse {
         this.scenarioCode = scenarioCode;
         this.motivationLevel = motivationLevel;
         this.opportunityLevel = opportunityLevel;
+        this.durationSeconds = durationSeconds;
         this.intentionQ1 = intentionQ1;
         this.intentionQ2 = intentionQ2;
         this.intentionQ3 = intentionQ3;
@@ -68,11 +74,20 @@ public class SurveyResponse {
         this.justificationQ3 = justificationQ3;
         this.intentionScore = average(intentionQ1, intentionQ2, intentionQ3);
         this.justificationScore = average(justificationQ1, justificationQ2, justificationQ3);
+        this.tooFast = durationSeconds > 0 && durationSeconds < 8;
+        this.straightLined = allSame(intentionQ1, intentionQ2, intentionQ3, justificationQ1, justificationQ2, justificationQ3);
         this.createdAt = LocalDateTime.now();
     }
 
     private double average(int a, int b, int c) {
         return (a + b + c) / 3.0;
+    }
+
+    private boolean allSame(int... values) {
+        for (int value : values) {
+            if (value != values[0]) return false;
+        }
+        return true;
     }
 
     public Long getId() { return id; }
@@ -81,6 +96,9 @@ public class SurveyResponse {
     public String getScenarioCode() { return scenarioCode; }
     public String getMotivationLevel() { return motivationLevel; }
     public String getOpportunityLevel() { return opportunityLevel; }
+    public long getDurationSeconds() { return durationSeconds; }
+    public boolean isTooFast() { return tooFast; }
+    public boolean isStraightLined() { return straightLined; }
     public int getIntentionQ1() { return intentionQ1; }
     public int getIntentionQ2() { return intentionQ2; }
     public int getIntentionQ3() { return intentionQ3; }
