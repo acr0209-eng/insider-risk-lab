@@ -88,6 +88,12 @@ public class AnalysisService {
         return participantProfileRepository.findAll();
     }
 
+    @Transactional
+    public void clearSurveyData() {
+        surveyResponseRepository.deleteAllInBatch();
+        participantProfileRepository.deleteAllInBatch();
+    }
+
     @Transactional(readOnly = true)
     public Map<String, Map<String, Long>> actionChoiceCounts() {
         Map<String, Map<String, Long>> result = new HashMap<>();
