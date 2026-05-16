@@ -75,6 +75,7 @@ public class SurveyService {
     public ParticipantProfile saveAwareness(String participantId, AwarenessForm form) {
         ParticipantProfile profile = new ParticipantProfile(
                 participantId,
+                form.getParticipantName().trim(),
                 form.getAwarenessQ1(),
                 form.getAwarenessQ2(),
                 form.getAwarenessQ3()
