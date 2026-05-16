@@ -4,7 +4,6 @@ public record ScenarioSummary(
         String scenarioCode,
         long responseCount,
         double averageIntention,
-        double averageJustification,
-        double averageAwareness
+        double averageJustification
 ) {
 }
