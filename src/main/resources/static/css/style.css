@@ -34,7 +34,7 @@ p { line-height: 1.7; }
 .matrix-table th, .matrix-table td { padding: 12px; border-bottom: 1px solid #dbe2ef; text-align: center; }
 .matrix-table th { background: #f8fafc; font-size: 14px; }
 .matrix-table tr:last-child td { border-bottom: 0; }
-.matrix-table .question-text { text-align: left; width: 58%; line-height: 1.55; }
+.matrix-table .question-text { text-align: left; width: 58%; line-height: 1.55; word-break: keep-all; overflow-wrap: break-word; }
 .score-cell { width: 8%; }
 .score-option { display: inline-flex; align-items: center; justify-content: center; gap: 4px; cursor: pointer; }
 .score-option input { transform: scale(1.15); }
@@ -46,10 +46,18 @@ p { line-height: 1.7; }
 .stat strong { font-size: 28px; }
 .error { color: #dc2626; font-weight: 700; }
 @media (max-width: 720px) {
-    .container { padding: 24px 12px; }
-    .card { padding: 20px; }
+    .container { padding: 18px 10px; }
+    .card { padding: 16px; }
     .scenario-image { max-height: 220px; margin-bottom: 14px; }
     .chat-line { grid-template-columns: 1fr; gap: 4px; }
-    .matrix-table th, .matrix-table td { padding: 8px 6px; font-size: 13px; }
-    .matrix-table .question-text { width: 50%; }
+
+    .matrix-table { border: 0; border-radius: 0; overflow: visible; }
+    .matrix-table thead { display: none; }
+    .matrix-table tbody, .matrix-table tr, .matrix-table td { display: block; width: 100%; box-sizing: border-box; }
+    .matrix-table tr { margin: 0 0 14px; padding: 14px; border: 1px solid #dbe2ef; border-radius: 16px; background: #ffffff; }
+    .matrix-table tr:last-child td { border-bottom: 0; }
+    .matrix-table .question-text { width: 100%; padding: 0 0 12px; border-bottom: 0; text-align: left; font-size: 15px; line-height: 1.6; word-break: keep-all; overflow-wrap: break-word; }
+    .matrix-table .score-cell { display: inline-flex; width: 19%; padding: 0; border-bottom: 0; justify-content: center; }
+    .score-option { width: 100%; min-height: 44px; border: 1px solid #dbe2ef; border-radius: 12px; background: #f8fafc; flex-direction: column; gap: 4px; }
+    .score-option input { transform: scale(1.25); margin: 0; }
 }
