@@ -14,9 +14,10 @@
         <p th:text="${scenario.content}"></p>
 
         <p class="muted">각 문항에 대해 1점 전혀 아니다 ~ 5점 매우 그렇다로 응답해주세요.</p>
-        <p class="error" th:if="${#fields.hasErrors('*')}">모든 문항에 1~5점으로 응답해주세요.</p>
 
         <form th:action="@{/survey/{code}(code=${scenario.code})}" th:object="${surveyForm}" method="post">
+            <p class="error" th:if="${#fields.hasErrors('*')}">모든 문항에 1~5점으로 응답해주세요.</p>
+
             <h2>보안위반 의향</h2>
             <div class="question" th:replace="~{fragments :: scale('intentionQ1', '나는 이 상황에서 개인 이메일이나 개인 클라우드로 자료를 옮길 가능성이 있다.')}"></div>
             <div class="question" th:replace="~{fragments :: scale('intentionQ2', '나는 업무를 위해서라면 승인되지 않은 방식의 자료 반출도 고려할 수 있다.')}"></div>
