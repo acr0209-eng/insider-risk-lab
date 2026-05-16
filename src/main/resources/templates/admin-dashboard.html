@@ -12,6 +12,7 @@
     <div class="card">
         <h1>관리자 대시보드</h1>
         <p class="muted">반복측정 설계: 한 참여자가 4개 상황을 모두 평가하고, 보안 인식은 마지막에 한 번만 응답합니다.</p>
+        <p class="stat" th:if="${message}" th:text="${message}" style="margin-top: 12px;">설문 응답 데이터가 초기화되었습니다.</p>
 
         <div class="grid">
             <div class="stat"><strong th:text="${totalParticipants}">0</strong><br>시작 참여자 수</div>
@@ -118,8 +119,11 @@
 
         <canvas id="intentionChart" style="margin-top: 32px;"></canvas>
 
-        <div style="margin-top: 24px;">
+        <div style="margin-top: 24px; display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
             <a class="button" th:href="@{/admin/responses.csv}">CSV 다운로드</a>
+            <form th:action="@{/admin/clear}" method="post" style="display:inline;" onsubmit="return confirm('모든 설문 응답과 참여자 목록을 삭제할까요? 시나리오 데이터는 유지됩니다.');">
+                <button class="button secondary" type="submit">응답 데이터 초기화</button>
+            </form>
             <form th:action="@{/logout}" method="post" style="display:inline;">
                 <button class="button secondary" type="submit">로그아웃</button>
             </form>
