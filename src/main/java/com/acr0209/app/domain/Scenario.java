@@ -21,37 +21,38 @@ public class Scenario {
     @Column(nullable = false)
     private String title;
 
+    @Column(nullable = false)
+    private String imagePath;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String chatText;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String situationSummary;
+
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
     protected Scenario() {
     }
 
-    public Scenario(String code, String motivationLevel, String opportunityLevel, String title, String content) {
+    public Scenario(String code, String motivationLevel, String opportunityLevel, String title, String imagePath, String chatText, String situationSummary, String content) {
         this.code = code;
         this.motivationLevel = motivationLevel;
         this.opportunityLevel = opportunityLevel;
         this.title = title;
+        this.imagePath = imagePath;
+        this.chatText = chatText;
+        this.situationSummary = situationSummary;
         this.content = content;
     }
 
-    public String getCode() {
-        return code;
-    }
-
-    public String getMotivationLevel() {
-        return motivationLevel;
-    }
-
-    public String getOpportunityLevel() {
-        return opportunityLevel;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getContent() {
-        return content;
-    }
+    public String getCode() { return code; }
+    public String getMotivationLevel() { return motivationLevel; }
+    public String getOpportunityLevel() { return opportunityLevel; }
+    public String getTitle() { return title; }
+    public String getImagePath() { return imagePath; }
+    public String getChatText() { return chatText; }
+    public String getSituationSummary() { return situationSummary; }
+    public String getContent() { return content; }
 }
