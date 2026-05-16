@@ -22,8 +22,10 @@ public class AdminController {
 
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
+        model.addAttribute("totalParticipants", analysisService.countParticipants());
         model.addAttribute("totalResponses", analysisService.countResponses());
         model.addAttribute("summaries", analysisService.summarizeByScenario());
+        model.addAttribute("interpretation", analysisService.interpretation());
         return "admin-dashboard";
     }
 
