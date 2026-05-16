@@ -26,6 +26,9 @@ public class SurveyResponse {
     private String motivationLevel;
     private String opportunityLevel;
 
+    @Column(nullable = false)
+    private String actionChoice;
+
     private long durationSeconds;
     private boolean tooFast;
     private boolean straightLined;
@@ -40,6 +43,7 @@ public class SurveyResponse {
 
     private double intentionScore;
     private double justificationScore;
+    private double riskScore;
 
     private LocalDateTime createdAt;
 
@@ -52,6 +56,7 @@ public class SurveyResponse {
             String scenarioCode,
             String motivationLevel,
             String opportunityLevel,
+            String actionChoice,
             long durationSeconds,
             int intentionQ1,
             int intentionQ2,
@@ -65,6 +70,7 @@ public class SurveyResponse {
         this.scenarioCode = scenarioCode;
         this.motivationLevel = motivationLevel;
         this.opportunityLevel = opportunityLevel;
+        this.actionChoice = actionChoice;
         this.durationSeconds = durationSeconds;
         this.intentionQ1 = intentionQ1;
         this.intentionQ2 = intentionQ2;
@@ -74,6 +80,7 @@ public class SurveyResponse {
         this.justificationQ3 = justificationQ3;
         this.intentionScore = average(intentionQ1, intentionQ2, intentionQ3);
         this.justificationScore = average(justificationQ1, justificationQ2, justificationQ3);
+        this.riskScore = (this.intentionScore * 0.6) + (this.justificationScore * 0.4);
         this.tooFast = durationSeconds > 0 && durationSeconds < 8;
         this.straightLined = allSame(intentionQ1, intentionQ2, intentionQ3, justificationQ1, justificationQ2, justificationQ3);
         this.createdAt = LocalDateTime.now();
@@ -96,6 +103,7 @@ public class SurveyResponse {
     public String getScenarioCode() { return scenarioCode; }
     public String getMotivationLevel() { return motivationLevel; }
     public String getOpportunityLevel() { return opportunityLevel; }
+    public String getActionChoice() { return actionChoice; }
     public long getDurationSeconds() { return durationSeconds; }
     public boolean isTooFast() { return tooFast; }
     public boolean isStraightLined() { return straightLined; }
@@ -107,5 +115,6 @@ public class SurveyResponse {
     public int getJustificationQ3() { return justificationQ3; }
     public double getIntentionScore() { return intentionScore; }
     public double getJustificationScore() { return justificationScore; }
+    public double getRiskScore() { return riskScore; }
     public LocalDateTime getCreatedAt() { return createdAt; }
 }
