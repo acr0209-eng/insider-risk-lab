@@ -20,13 +20,6 @@ public class SurveyForm {
     @NotNull @Min(1) @Max(5)
     private Integer justificationQ3;
 
-    @NotNull @Min(1) @Max(5)
-    private Integer awarenessQ1;
-    @NotNull @Min(1) @Max(5)
-    private Integer awarenessQ2;
-    @NotNull @Min(1) @Max(5)
-    private Integer awarenessQ3;
-
     public Integer getIntentionQ1() { return intentionQ1; }
     public void setIntentionQ1(Integer intentionQ1) { this.intentionQ1 = intentionQ1; }
     public Integer getIntentionQ2() { return intentionQ2; }
@@ -39,10 +32,4 @@ public class SurveyForm {
     public void setJustificationQ2(Integer justificationQ2) { this.justificationQ2 = justificationQ2; }
     public Integer getJustificationQ3() { return justificationQ3; }
     public void setJustificationQ3(Integer justificationQ3) { this.justificationQ3 = justificationQ3; }
-    public Integer getAwarenessQ1() { return awarenessQ1; }
-    public void setAwarenessQ1(Integer awarenessQ1) { this.awarenessQ1 = awarenessQ1; }
-    public Integer getAwarenessQ2() { return awarenessQ2; }
-    public void setAwarenessQ2(Integer awarenessQ2) { this.awarenessQ2 = awarenessQ2; }
-    public Integer getAwarenessQ3() { return awarenessQ3; }
-    public void setAwarenessQ3(Integer awarenessQ3) { this.awarenessQ3 = awarenessQ3; }
 }
