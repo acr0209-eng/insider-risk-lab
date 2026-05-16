@@ -19,6 +19,7 @@ public class ParticipantProfile {
     @Column(nullable = false, unique = true)
     private String participantId;
 
+    private String participantName;
     private int awarenessQ1;
     private int awarenessQ2;
     private int awarenessQ3;
@@ -28,8 +29,9 @@ public class ParticipantProfile {
     protected ParticipantProfile() {
     }
 
-    public ParticipantProfile(String participantId, int awarenessQ1, int awarenessQ2, int awarenessQ3) {
+    public ParticipantProfile(String participantId, String participantName, int awarenessQ1, int awarenessQ2, int awarenessQ3) {
         this.participantId = participantId;
+        this.participantName = participantName;
         this.awarenessQ1 = awarenessQ1;
         this.awarenessQ2 = awarenessQ2;
         this.awarenessQ3 = awarenessQ3;
@@ -39,6 +41,7 @@ public class ParticipantProfile {
 
     public Long getId() { return id; }
     public String getParticipantId() { return participantId; }
+    public String getParticipantName() { return participantName; }
     public int getAwarenessQ1() { return awarenessQ1; }
     public int getAwarenessQ2() { return awarenessQ2; }
     public int getAwarenessQ3() { return awarenessQ3; }
