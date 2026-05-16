@@ -32,6 +32,7 @@ public class AdminController {
         model.addAttribute("averageAwarenessScore", analysisService.averageAwarenessScore());
         model.addAttribute("summaries", analysisService.summarizeByScenario());
         model.addAttribute("diff", analysisService.intentionDifferences());
+        model.addAttribute("actionChoiceCounts", analysisService.actionChoiceCounts());
         model.addAttribute("reportSummary", analysisService.reportSummary());
         return "admin-dashboard";
     }
