@@ -7,11 +7,26 @@ p { line-height: 1.7; }
 .button { display: inline-block; padding: 12px 18px; border-radius: 12px; background: #2563eb; color: white; text-decoration: none; border: 0; font-weight: 700; cursor: pointer; }
 .button.secondary { background: #0f172a; }
 .button:hover { filter: brightness(0.96); }
+.scenario-image { width: 100%; max-height: 420px; object-fit: cover; border-radius: 22px; border: 1px solid #dbe2ef; margin-bottom: 24px; background: #f8fafc; }
 .scenario-box { background: #f8fafc; border: 1px solid #dbe2ef; border-radius: 16px; padding: 20px; margin: 18px 0; }
+.scenario-box ul { margin: 8px 0 0; padding-left: 22px; }
+.chat-card { background: #0f172a; color: white; border-radius: 18px; padding: 22px; margin: 20px 0; }
+.chat-card h2 { margin-top: 0; color: white; }
+.chat-line { display: grid; grid-template-columns: 150px 1fr; gap: 12px; padding: 12px 0; border-top: 1px solid rgba(255,255,255,.14); }
+.chat-line:first-of-type { border-top: 0; }
+.chat-line strong { color: #bfdbfe; }
+.chat-line span { color: #f8fafc; }
 .progress-wrap { margin-bottom: 20px; }
 .progress-bar { width: 100%; height: 10px; background: #e5e7eb; border-radius: 999px; overflow: hidden; margin-top: 8px; }
 .progress-fill { height: 100%; background: #2563eb; border-radius: 999px; }
 .survey-section { margin-top: 26px; }
+.action-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.action-option { border: 1px solid #dbe2ef; border-radius: 16px; padding: 16px; background: #f8fafc; cursor: pointer; display: flex; align-items: flex-start; gap: 10px; line-height: 1.5; }
+.action-option:hover { border-color: #2563eb; background: #eff6ff; }
+.action-option.danger { border-color: #fecaca; background: #fff7f7; }
+.action-option input { margin-top: 4px; transform: scale(1.1); }
+.feedback-hero { border: 1px solid #bfdbfe; border-radius: 20px; padding: 24px; background: linear-gradient(135deg, #eff6ff, #f8fafc); margin: 20px 0; }
+.feedback-hero h2 { font-size: 34px; margin: 8px 0; color: #1d4ed8; }
 .question { padding: 18px 0; border-top: 1px solid #dbe2ef; }
 .scale { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
 .scale label { border: 1px solid #dbe2ef; border-radius: 10px; padding: 8px 10px; background: white; }
@@ -33,6 +48,7 @@ p { line-height: 1.7; }
 @media (max-width: 720px) {
     .container { padding: 24px 12px; }
     .card { padding: 20px; }
+    .chat-line { grid-template-columns: 1fr; gap: 4px; }
     .matrix-table th, .matrix-table td { padding: 8px 6px; font-size: 13px; }
     .matrix-table .question-text { width: 50%; }
 }
