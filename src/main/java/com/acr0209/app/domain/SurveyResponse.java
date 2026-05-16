@@ -34,13 +34,8 @@ public class SurveyResponse {
     private int justificationQ2;
     private int justificationQ3;
 
-    private int awarenessQ1;
-    private int awarenessQ2;
-    private int awarenessQ3;
-
     private double intentionScore;
     private double justificationScore;
-    private double awarenessScore;
 
     private LocalDateTime createdAt;
 
@@ -58,10 +53,7 @@ public class SurveyResponse {
             int intentionQ3,
             int justificationQ1,
             int justificationQ2,
-            int justificationQ3,
-            int awarenessQ1,
-            int awarenessQ2,
-            int awarenessQ3
+            int justificationQ3
     ) {
         this.participantId = participantId;
         this.scenarioOrder = scenarioOrder;
@@ -74,12 +66,8 @@ public class SurveyResponse {
         this.justificationQ1 = justificationQ1;
         this.justificationQ2 = justificationQ2;
         this.justificationQ3 = justificationQ3;
-        this.awarenessQ1 = awarenessQ1;
-        this.awarenessQ2 = awarenessQ2;
-        this.awarenessQ3 = awarenessQ3;
         this.intentionScore = average(intentionQ1, intentionQ2, intentionQ3);
         this.justificationScore = average(justificationQ1, justificationQ2, justificationQ3);
-        this.awarenessScore = average(awarenessQ1, awarenessQ2, awarenessQ3);
         this.createdAt = LocalDateTime.now();
     }
 
@@ -99,11 +87,7 @@ public class SurveyResponse {
     public int getJustificationQ1() { return justificationQ1; }
     public int getJustificationQ2() { return justificationQ2; }
     public int getJustificationQ3() { return justificationQ3; }
-    public int getAwarenessQ1() { return awarenessQ1; }
-    public int getAwarenessQ2() { return awarenessQ2; }
-    public int getAwarenessQ3() { return awarenessQ3; }
     public double getIntentionScore() { return intentionScore; }
     public double getJustificationScore() { return justificationScore; }
-    public double getAwarenessScore() { return awarenessScore; }
     public LocalDateTime getCreatedAt() { return createdAt; }
 }
