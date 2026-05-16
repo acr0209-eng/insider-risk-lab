@@ -8,32 +8,51 @@
 </head>
 <body>
 <div class="container">
-    <div class="card">
-        <p class="muted">상황 <span th:text="${step}">1</span> / <span th:text="${totalSteps}">4</span></p>
-        <h1>상황 시나리오</h1>
-        <p th:text="${scenario.content}"></p>
+    <div class="card survey-card">
+        <div class="progress-wrap">
+            <div class="muted">상황 <span th:text="${step}">1</span> / <span th:text="${totalSteps}">4</span></div>
+            <div class="progress-bar"><div class="progress-fill" th:style="'width:' + (${step} * 100 / ${totalSteps}) + '%' "></div></div>
+        </div>
 
-        <p class="muted">각 문항에 대해 1점 전혀 아니다 ~ 5점 매우 그렇다로 응답해주세요.</p>
+        <h1>상황을 읽고 판단해주세요</h1>
+        <div class="scenario-box">
+            <p th:text="${scenario.content}"></p>
+        </div>
+
+        <p class="muted">1점은 ‘전혀 아니다’, 5점은 ‘매우 그렇다’입니다.</p>
 
         <form th:action="@{/survey/current}" th:object="${surveyForm}" method="post">
             <p class="error" th:if="${#fields.hasErrors('*')}">모든 문항에 1~5점으로 응답해주세요.</p>
 
-            <h2>보안위반 의향</h2>
-            <div class="question" th:replace="~{fragments :: scale('intentionQ1', '나는 이 상황에서 개인 이메일이나 개인 클라우드로 자료를 옮길 가능성이 있다.')}"></div>
-            <div class="question" th:replace="~{fragments :: scale('intentionQ2', '나는 업무를 위해서라면 승인되지 않은 방식의 자료 반출도 고려할 수 있다.')}"></div>
-            <div class="question" th:replace="~{fragments :: scale('intentionQ3', '나는 보안 절차를 지키기보다 업무 마감을 우선할 가능성이 있다.')}"></div>
+            <section class="survey-section">
+                <h2>보안위반 의향</h2>
+                <table class="matrix-table">
+                    <thead>
+                    <tr><th>문항</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr>
+                    </thead>
+                    <tbody>
+                    <tr th:replace="~{fragments :: scaleRow('intentionQ1', '나는 이 상황에서 개인 이메일이나 개인 클라우드로 자료를 옮길 가능성이 있다.')}"></tr>
+                    <tr th:replace="~{fragments :: scaleRow('intentionQ2', '나는 업무를 위해서라면 승인되지 않은 방식의 자료 반출도 고려할 수 있다.')}"></tr>
+                    <tr th:replace="~{fragments :: scaleRow('intentionQ3', '나는 보안 절차를 지키기보다 업무 마감을 우선할 가능성이 있다.')}"></tr>
+                    </tbody>
+                </table>
+            </section>
 
-            <h2>정당화 수준</h2>
-            <div class="question" th:replace="~{fragments :: scale('justificationQ1', '업무 목적이라면 일시적인 자료 반출은 어느 정도 이해될 수 있다.')}"></div>
-            <div class="question" th:replace="~{fragments :: scale('justificationQ2', '회사에 피해를 주려는 의도가 없다면 큰 문제는 아니라고 생각한다.')}"></div>
-            <div class="question" th:replace="~{fragments :: scale('justificationQ3', '보안 절차가 업무 효율을 지나치게 떨어뜨린다면 우회할 수도 있다고 생각한다.')}"></div>
+            <section class="survey-section">
+                <h2>정당화 수준</h2>
+                <table class="matrix-table">
+                    <thead>
+                    <tr><th>문항</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr>
+                    </thead>
+                    <tbody>
+                    <tr th:replace="~{fragments :: scaleRow('justificationQ1', '업무 목적이라면 일시적인 자료 반출은 어느 정도 이해될 수 있다.')}"></tr>
+                    <tr th:replace="~{fragments :: scaleRow('justificationQ2', '회사에 피해를 주려는 의도가 없다면 큰 문제는 아니라고 생각한다.')}"></tr>
+                    <tr th:replace="~{fragments :: scaleRow('justificationQ3', '보안 절차가 업무 효율을 지나치게 떨어뜨린다면 우회할 수도 있다고 생각한다.')}"></tr>
+                    </tbody>
+                </table>
+            </section>
 
-            <h2>보안 인식</h2>
-            <div class="question" th:replace="~{fragments :: scale('awarenessQ1', '내부자료 반출은 기업에 심각한 피해를 줄 수 있다고 생각한다.')}"></div>
-            <div class="question" th:replace="~{fragments :: scale('awarenessQ2', '개인 이메일이나 개인 클라우드 사용은 보안상 위험하다고 생각한다.')}"></div>
-            <div class="question" th:replace="~{fragments :: scale('awarenessQ3', '보안규정을 위반하면 의도와 관계없이 책임이 발생할 수 있다고 생각한다.')}"></div>
-
-            <button class="button" type="submit" th:text="${step == totalSteps ? '최종 제출' : '다음 상황으로'}">다음</button>
+            <button class="button" type="submit" th:text="${step == totalSteps ? '공통 문항으로 이동' : '다음 상황으로'}">다음</button>
         </form>
     </div>
 </div>
