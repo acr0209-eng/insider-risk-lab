@@ -1,5 +1,6 @@
 package com.acr0209.app.service;
 
+import com.acr0209.app.domain.ParticipantProfile;
 import com.acr0209.app.domain.SurveyResponse;
 import com.acr0209.app.dto.ScenarioSummary;
 import com.acr0209.app.repository.ParticipantProfileRepository;
@@ -83,6 +84,11 @@ public class AnalysisService {
     }
 
     @Transactional(readOnly = true)
+    public List<ParticipantProfile> participantProfiles() {
+        return participantProfileRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
     public Map<String, Map<String, Long>> actionChoiceCounts() {
         Map<String, Map<String, Long>> result = new HashMap<>();
         for (Object[] row : surveyResponseRepository.countActionChoicesByScenario()) {
@@ -133,8 +139,12 @@ public class AnalysisService {
     @Transactional(readOnly = true)
     public byte[] exportCsv() {
         List<SurveyResponse> responses = surveyResponseRepository.findAll();
+        Map<String, String> names = new HashMap<>();
+        for (ParticipantProfile profile : participantProfileRepository.findAll()) {
+            names.put(profile.getParticipantId(), profile.getParticipantName());
+        }
         StringBuilder csv = new StringBuilder();
-        csv.append("id,participantId,scenarioOrder,scenarioCode,motivationLevel,opportunityLevel,")
+        csv.append("id,participantId,participantName,scenarioOrder,scenarioCode,motivationLevel,opportunityLevel,")
                 .append("actionChoice,durationSeconds,tooFast,straightLined,")
                 .append("intentionQ1,intentionQ2,intentionQ3,")
                 .append("justificationQ1,justificationQ2,justificationQ3,")
@@ -143,6 +153,7 @@ public class AnalysisService {
         for (SurveyResponse r : responses) {
             csv.append(r.getId()).append(',')
                     .append(r.getParticipantId()).append(',')
+                    .append(csvValue(names.getOrDefault(r.getParticipantId(), ""))).append(',')
                     .append(r.getScenarioOrder()).append(',')
                     .append(r.getScenarioCode()).append(',')
                     .append(r.getMotivationLevel()).append(',')
@@ -163,6 +174,11 @@ public class AnalysisService {
                     .append(r.getCreatedAt()).append('\n');
         }
         return csv.toString().getBytes(StandardCharsets.UTF_8);
+    }
+
+    private String csvValue(String value) {
+        if (value == null) return "";
+        return "\"" + value.replace("\"", "\"\"") + "\"";
     }
 
     private double round(double value) {
