@@ -14,15 +14,52 @@
             <div class="progress-bar"><div class="progress-fill" th:style="'width:' + (${step} * 100 / ${totalSteps}) + '%' "></div></div>
         </div>
 
-        <h1>상황을 읽고 판단해주세요</h1>
-        <div class="scenario-box">
-            <p th:text="${scenario.content}"></p>
-        </div>
+        <img class="scenario-image" th:src="@{${scenario.imagePath}}" alt="상황 이미지">
 
-        <p class="muted">1점은 ‘전혀 아니다’, 5점은 ‘매우 그렇다’입니다.</p>
+        <h1 th:text="${scenario.title}">상황 제목</h1>
+        <p class="muted">업무 메신저와 현재 상황을 보고 실제 본인이라면 어떤 판단을 할지 응답해주세요.</p>
+
+        <section class="chat-card">
+            <h2>업무 메신저</h2>
+            <div class="chat-line" th:each="line : ${chatLines}">
+                <strong th:text="${#strings.substringBefore(line, '|')}">보낸 사람</strong>
+                <span th:text="${#strings.substringAfter(line, '|')}">메시지</span>
+            </div>
+        </section>
+
+        <section class="scenario-box">
+            <h2>현재 상황</h2>
+            <ul>
+                <li th:each="line : ${summaryLines}" th:text="${#strings.replace(line, '- ', '')}">상황 요약</li>
+            </ul>
+        </section>
 
         <form th:action="@{/survey/current}" th:object="${surveyForm}" method="post">
-            <p class="error" th:if="${#fields.hasErrors('*')}">모든 문항에 1~5점으로 응답해주세요.</p>
+            <p class="error" th:if="${#fields.hasErrors('*')}">행동 선택과 모든 문항에 응답해주세요.</p>
+
+            <section class="survey-section action-section">
+                <h2>당신은 어떻게 하겠습니까?</h2>
+                <div class="action-grid">
+                    <label class="action-option">
+                        <input type="radio" th:field="*{actionChoice}" value="wait_for_approval">
+                        <span>공식 승인 절차를 기다린다</span>
+                    </label>
+                    <label class="action-option">
+                        <input type="radio" th:field="*{actionChoice}" value="request_adjustment">
+                        <span>팀장에게 일정 조정을 요청한다</span>
+                    </label>
+                    <label class="action-option">
+                        <input type="radio" th:field="*{actionChoice}" value="ask_coworker">
+                        <span>동료에게 대신 확인을 부탁한다</span>
+                    </label>
+                    <label class="action-option danger">
+                        <input type="radio" th:field="*{actionChoice}" value="use_personal_channel">
+                        <span>개인 이메일/클라우드로 옮겨 확인한다</span>
+                    </label>
+                </div>
+            </section>
+
+            <p class="muted">아래 문항은 1점 ‘전혀 아니다’ ~ 5점 ‘매우 그렇다’로 응답해주세요.</p>
 
             <section class="survey-section">
                 <h2>보안위반 의향</h2>
