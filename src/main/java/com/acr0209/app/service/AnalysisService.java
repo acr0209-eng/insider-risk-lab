@@ -76,9 +76,22 @@ public class AnalysisService {
                         (String) row[0],
                         (Long) row[1],
                         round((Double) row[2]),
-                        round((Double) row[3])
+                        round((Double) row[3]),
+                        round((Double) row[4])
                 ))
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public Map<String, Map<String, Long>> actionChoiceCounts() {
+        Map<String, Map<String, Long>> result = new HashMap<>();
+        for (Object[] row : surveyResponseRepository.countActionChoicesByScenario()) {
+            String scenarioCode = (String) row[0];
+            String actionChoice = (String) row[1];
+            Long count = (Long) row[2];
+            result.computeIfAbsent(scenarioCode, key -> new HashMap<>()).put(actionChoice, count);
+        }
+        return result;
     }
 
     @Transactional(readOnly = true)
@@ -107,11 +120,14 @@ public class AnalysisService {
                 .min((a, b) -> Double.compare(a.averageIntention(), b.averageIntention()))
                 .orElseThrow();
         Map<String, Double> diff = intentionDifferences();
+        Map<String, Map<String, Long>> choices = actionChoiceCounts();
+        long aPersonal = choices.getOrDefault("A", Map.of()).getOrDefault("use_personal_channel", 0L);
         return "현재까지 총 " + countCompletedParticipants() + "명의 완료 참여자와 " + countResponses()
                 + "개의 시나리오 응답이 수집되었다. 반출 의향 평균은 " + highest.scenarioCode()
                 + " 조건에서 " + highest.averageIntention() + "점으로 가장 높았고, " + lowest.scenarioCode()
                 + " 조건에서 " + lowest.averageIntention() + "점으로 가장 낮았다. A-D 평균 차이는 "
-                + diff.get("A-D") + "점으로, 업무상 동기와 보안위반 기회가 함께 존재할 때 내부자료 반출 의향이 증가하는지 검토할 수 있다.";
+                + diff.get("A-D") + "점이다. A 조건에서 개인 이메일/클라우드 선택은 " + aPersonal
+                + "회 기록되어, 업무 압박과 쉬운 반출 기회가 함께 제시될 때 실제 우회 선택이 증가하는지 검토할 수 있다.";
     }
 
     @Transactional(readOnly = true)
@@ -119,10 +135,10 @@ public class AnalysisService {
         List<SurveyResponse> responses = surveyResponseRepository.findAll();
         StringBuilder csv = new StringBuilder();
         csv.append("id,participantId,scenarioOrder,scenarioCode,motivationLevel,opportunityLevel,")
-                .append("durationSeconds,tooFast,straightLined,")
+                .append("actionChoice,durationSeconds,tooFast,straightLined,")
                 .append("intentionQ1,intentionQ2,intentionQ3,")
                 .append("justificationQ1,justificationQ2,justificationQ3,")
-                .append("intentionScore,justificationScore,createdAt\n");
+                .append("intentionScore,justificationScore,riskScore,createdAt\n");
 
         for (SurveyResponse r : responses) {
             csv.append(r.getId()).append(',')
@@ -131,6 +147,7 @@ public class AnalysisService {
                     .append(r.getScenarioCode()).append(',')
                     .append(r.getMotivationLevel()).append(',')
                     .append(r.getOpportunityLevel()).append(',')
+                    .append(r.getActionChoice()).append(',')
                     .append(r.getDurationSeconds()).append(',')
                     .append(r.isTooFast()).append(',')
                     .append(r.isStraightLined()).append(',')
@@ -142,6 +159,7 @@ public class AnalysisService {
                     .append(r.getJustificationQ3()).append(',')
                     .append(r.getIntentionScore()).append(',')
                     .append(r.getJustificationScore()).append(',')
+                    .append(r.getRiskScore()).append(',')
                     .append(r.getCreatedAt()).append('\n');
         }
         return csv.toString().getBytes(StandardCharsets.UTF_8);
