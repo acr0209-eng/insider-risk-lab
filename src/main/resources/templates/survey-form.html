@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survey - Insider Risk Lab</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <h1 th:text="${scenario.title}">시나리오</h1>
+        <p class="muted">조건 코드: <span th:text="${scenario.code}"></span> / Motivation: <span th:text="${scenario.motivationLevel}"></span> / Opportunity: <span th:text="${scenario.opportunityLevel}"></span></p>
+        <p th:text="${scenario.content}"></p>
+
+        <p class="muted">각 문항에 대해 1점 전혀 아니다 ~ 5점 매우 그렇다로 응답해주세요.</p>
+        <p class="error" th:if="${#fields.hasErrors('*')}">모든 문항에 1~5점으로 응답해주세요.</p>
+
+        <form th:action="@{/survey/{code}(code=${scenario.code})}" th:object="${surveyForm}" method="post">
+            <h2>보안위반 의향</h2>
+            <div class="question" th:replace="~{fragments :: scale('intentionQ1', '나는 이 상황에서 개인 이메일이나 개인 클라우드로 자료를 옮길 가능성이 있다.')}"></div>
+            <div class="question" th:replace="~{fragments :: scale('intentionQ2', '나는 업무를 위해서라면 승인되지 않은 방식의 자료 반출도 고려할 수 있다.')}"></div>
+            <div class="question" th:replace="~{fragments :: scale('intentionQ3', '나는 보안 절차를 지키기보다 업무 마감을 우선할 가능성이 있다.')}"></div>
+
+            <h2>정당화 수준</h2>
+            <div class="question" th:replace="~{fragments :: scale('justificationQ1', '업무 목적이라면 일시적인 자료 반출은 어느 정도 이해될 수 있다.')}"></div>
+            <div class="question" th:replace="~{fragments :: scale('justificationQ2', '회사에 피해를 주려는 의도가 없다면 큰 문제는 아니라고 생각한다.')}"></div>
+            <div class="question" th:replace="~{fragments :: scale('justificationQ3', '보안 절차가 업무 효율을 지나치게 떨어뜨린다면 우회할 수도 있다고 생각한다.')}"></div>
+
+            <h2>보안 인식</h2>
+            <div class="question" th:replace="~{fragments :: scale('awarenessQ1', '내부자료 반출은 기업에 심각한 피해를 줄 수 있다고 생각한다.')}"></div>
+            <div class="question" th:replace="~{fragments :: scale('awarenessQ2', '개인 이메일이나 개인 클라우드 사용은 보안상 위험하다고 생각한다.')}"></div>
+            <div class="question" th:replace="~{fragments :: scale('awarenessQ3', '보안규정을 위반하면 의도와 관계없이 책임이 발생할 수 있다고 생각한다.')}"></div>
+
+            <button class="button" type="submit">응답 제출</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
