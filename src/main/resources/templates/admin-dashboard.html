@@ -11,14 +11,28 @@
 <div class="container">
     <div class="card">
         <h1>관리자 대시보드</h1>
-        <p class="muted">시나리오별 응답 수와 평균 점수를 확인합니다.</p>
-        <div class="grid">
-            <div class="stat"><strong th:text="${totalResponses}">0</strong><br>전체 응답 수</div>
-            <div class="stat"><strong>2×2</strong><br>동기 × 기회 실험</div>
-        </div>
-        <a class="button" th:href="@{/admin/responses.csv}">CSV 다운로드</a>
-        <a class="button secondary" th:href="@{/}">홈으로</a>
+        <p class="muted">반복측정 설계: 한 참여자가 4개 상황을 모두 평가합니다.</p>
 
+        <div class="grid">
+            <div class="stat"><strong th:text="${totalParticipants}">0</strong><br>전체 참여자 수</div>
+            <div class="stat"><strong th:text="${totalResponses}">0</strong><br>전체 응답 수</div>
+            <div class="stat"><strong>4조건</strong><br>동기 × 기회</div>
+        </div>
+
+        <h2>실험 조건 구조</h2>
+        <table class="table">
+            <thead>
+            <tr><th>조건</th><th>업무상 동기</th><th>보안위반 기회</th><th>해석</th></tr>
+            </thead>
+            <tbody>
+            <tr><td>A</td><td>높음</td><td>높음</td><td>마감 압박이 크고 자료 반출이 쉬운 상황</td></tr>
+            <tr><td>B</td><td>높음</td><td>낮음</td><td>마감 압박은 크지만 보안통제가 강한 상황</td></tr>
+            <tr><td>C</td><td>낮음</td><td>높음</td><td>업무 필요성은 낮지만 자료 반출이 쉬운 상황</td></tr>
+            <tr><td>D</td><td>낮음</td><td>낮음</td><td>업무 필요성도 낮고 보안통제도 강한 상황</td></tr>
+            </tbody>
+        </table>
+
+        <h2>조건별 평균</h2>
         <table class="table">
             <thead>
             <tr>
@@ -40,30 +54,41 @@
             </tbody>
         </table>
 
+        <div class="stat" style="margin-top: 20px;">
+            <strong>자동 해석</strong>
+            <p th:text="${interpretation}">아직 응답 데이터가 없습니다.</p>
+        </div>
+
         <canvas id="intentionChart" style="margin-top: 32px;"></canvas>
+
+        <div style="margin-top: 24px;">
+            <a class="button" th:href="@{/admin/responses.csv}">CSV 다운로드</a>
+            <form th:action="@{/logout}" method="post" style="display:inline;">
+                <button class="button secondary" type="submit">로그아웃</button>
+            </form>
+        </div>
     </div>
 </div>
 <script th:inline="javascript">
     const summaries = /*[[${summaries}]]*/ [];
     const labels = summaries.map(item => item.scenarioCode);
-    const averages = summaries.map(item => item.averageIntention);
+    const intention = summaries.map(item => item.averageIntention);
+    const justification = summaries.map(item => item.averageJustification);
+    const awareness = summaries.map(item => item.averageAwareness);
 
     new Chart(document.getElementById('intentionChart'), {
         type: 'bar',
         data: {
             labels,
-            datasets: [{
-                label: '반출 의향 평균',
-                data: averages
-            }]
+            datasets: [
+                { label: '반출 의향 평균', data: intention },
+                { label: '정당화 평균', data: justification },
+                { label: '보안 인식 평균', data: awareness }
+            ]
         },
         options: {
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    max: 5
-                }
-            }
+            responsive: true,
+            scales: { y: { beginAtZero: true, max: 5 } }
         }
     });
 </script>
