@@ -11,12 +11,22 @@
 <div class="container">
     <div class="card">
         <h1>관리자 대시보드</h1>
-        <p class="muted">반복측정 설계: 한 참여자가 4개 상황을 모두 평가합니다.</p>
+        <p class="muted">반복측정 설계: 한 참여자가 4개 상황을 모두 평가하고, 보안 인식은 마지막에 한 번만 응답합니다.</p>
 
         <div class="grid">
-            <div class="stat"><strong th:text="${totalParticipants}">0</strong><br>전체 참여자 수</div>
-            <div class="stat"><strong th:text="${totalResponses}">0</strong><br>전체 응답 수</div>
-            <div class="stat"><strong>4조건</strong><br>동기 × 기회</div>
+            <div class="stat"><strong th:text="${totalParticipants}">0</strong><br>시작 참여자 수</div>
+            <div class="stat"><strong th:text="${completedParticipants}">0</strong><br>완료 참여자 수</div>
+            <div class="stat"><strong th:text="${completionRate + '%'}">0%</strong><br>완료율</div>
+            <div class="stat"><strong th:text="${totalResponses}">0</strong><br>상황 응답 수</div>
+            <div class="stat"><strong th:text="${averageDurationSeconds + '초'}">0초</strong><br>상황당 평균 응답시간</div>
+            <div class="stat"><strong th:text="${averageAwarenessScore}">0</strong><br>평균 보안 인식</div>
+        </div>
+
+        <h2>응답 품질 체크</h2>
+        <div class="grid">
+            <div class="stat"><strong th:text="${tooFastResponses}">0</strong><br>8초 미만 응답</div>
+            <div class="stat"><strong th:text="${straightLinedResponses}">0</strong><br>모든 문항 동일 점수</div>
+            <div class="stat"><strong>CSV</strong><br>품질 플래그 포함</div>
         </div>
 
         <h2>실험 조건 구조</h2>
@@ -40,7 +50,6 @@
                 <th>응답 수</th>
                 <th>반출 의향 평균</th>
                 <th>정당화 평균</th>
-                <th>보안 인식 평균</th>
             </tr>
             </thead>
             <tbody>
@@ -49,14 +58,20 @@
                 <td th:text="${summary.responseCount}">0</td>
                 <td th:text="${summary.averageIntention}">0</td>
                 <td th:text="${summary.averageJustification}">0</td>
-                <td th:text="${summary.averageAwareness}">0</td>
             </tr>
             </tbody>
         </table>
 
+        <h2>핵심 평균 차이</h2>
+        <div class="grid">
+            <div class="stat"><strong th:text="${diff['A-D']}">0</strong><br>A - D</div>
+            <div class="stat"><strong th:text="${diff['A-B']}">0</strong><br>A - B</div>
+            <div class="stat"><strong th:text="${diff['A-C']}">0</strong><br>A - C</div>
+        </div>
+
         <div class="stat" style="margin-top: 20px;">
-            <strong>자동 해석</strong>
-            <p th:text="${interpretation}">아직 응답 데이터가 없습니다.</p>
+            <strong>보고서용 요약문</strong>
+            <p th:text="${reportSummary}">아직 응답 데이터가 없습니다.</p>
         </div>
 
         <canvas id="intentionChart" style="margin-top: 32px;"></canvas>
@@ -74,7 +89,6 @@
     const labels = summaries.map(item => item.scenarioCode);
     const intention = summaries.map(item => item.averageIntention);
     const justification = summaries.map(item => item.averageJustification);
-    const awareness = summaries.map(item => item.averageAwareness);
 
     new Chart(document.getElementById('intentionChart'), {
         type: 'bar',
@@ -82,8 +96,7 @@
             labels,
             datasets: [
                 { label: '반출 의향 평균', data: intention },
-                { label: '정당화 평균', data: justification },
-                { label: '보안 인식 평균', data: awareness }
+                { label: '정당화 평균', data: justification }
             ]
         },
         options: {
