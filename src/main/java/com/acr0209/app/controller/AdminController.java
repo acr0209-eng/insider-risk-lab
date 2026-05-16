@@ -1,6 +1,7 @@
 package com.acr0209.app.controller;
 
 import com.acr0209.app.service.AnalysisService;
+import java.util.List;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -32,7 +33,9 @@ public class AdminController {
         model.addAttribute("averageAwarenessScore", analysisService.averageAwarenessScore());
         model.addAttribute("summaries", analysisService.summarizeByScenario());
         model.addAttribute("diff", analysisService.intentionDifferences());
+        model.addAttribute("scenarioCodes", List.of("A", "B", "C", "D"));
         model.addAttribute("actionChoiceCounts", analysisService.actionChoiceCounts());
+        model.addAttribute("participantProfiles", analysisService.participantProfiles());
         model.addAttribute("reportSummary", analysisService.reportSummary());
         return "admin-dashboard";
     }
