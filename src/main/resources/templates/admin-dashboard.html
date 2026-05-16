@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Insider Risk Lab</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <h1>관리자 대시보드</h1>
+        <p class="muted">시나리오별 응답 수와 평균 점수를 확인합니다.</p>
+        <div class="grid">
+            <div class="stat"><strong th:text="${totalResponses}">0</strong><br>전체 응답 수</div>
+            <div class="stat"><strong>2×2</strong><br>동기 × 기회 실험</div>
+        </div>
+        <a class="button" th:href="@{/admin/responses.csv}">CSV 다운로드</a>
+        <a class="button secondary" th:href="@{/}">홈으로</a>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>시나리오</th>
+                <th>응답 수</th>
+                <th>반출 의향 평균</th>
+                <th>정당화 평균</th>
+                <th>보안 인식 평균</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="summary : ${summaries}">
+                <td th:text="${summary.scenarioCode}">A</td>
+                <td th:text="${summary.responseCount}">0</td>
+                <td th:text="${summary.averageIntention}">0</td>
+                <td th:text="${summary.averageJustification}">0</td>
+                <td th:text="${summary.averageAwareness}">0</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <canvas id="intentionChart" style="margin-top: 32px;"></canvas>
+    </div>
+</div>
+<script th:inline="javascript">
+    const summaries = /*[[${summaries}]]*/ [];
+    const labels = summaries.map(item => item.scenarioCode);
+    const averages = summaries.map(item => item.averageIntention);
+
+    new Chart(document.getElementById('intentionChart'), {
+        type: 'bar',
+        data: {
+            labels,
+            datasets: [{
+                label: '반출 의향 평균',
+                data: averages
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 5
+                }
+            }
+        }
+    });
+</script>
+</body>
+</html>
