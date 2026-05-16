@@ -2,9 +2,13 @@ package com.acr0209.app.dto;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class SurveyForm {
+
+    @NotBlank
+    private String actionChoice;
 
     @NotNull @Min(1) @Max(5)
     private Integer intentionQ1;
@@ -20,6 +24,8 @@ public class SurveyForm {
     @NotNull @Min(1) @Max(5)
     private Integer justificationQ3;
 
+    public String getActionChoice() { return actionChoice; }
+    public void setActionChoice(String actionChoice) { this.actionChoice = actionChoice; }
     public Integer getIntentionQ1() { return intentionQ1; }
     public void setIntentionQ1(Integer intentionQ1) { this.intentionQ1 = intentionQ1; }
     public Integer getIntentionQ2() { return intentionQ2; }
