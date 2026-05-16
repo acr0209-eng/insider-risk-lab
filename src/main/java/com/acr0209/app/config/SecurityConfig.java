@@ -24,6 +24,7 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**").authenticated()
                         .anyRequest().permitAll()
                 )
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/survey/**"))
                 .formLogin(Customizer.withDefaults())
                 .logout(logout -> logout.logoutSuccessUrl("/"));
         return http.build();
